@@ -27,21 +27,162 @@ public class AutoClickerUi extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        onoffbutton = new javax.swing.JToggleButton();
+        msbtwclicksslider = new javax.swing.JSlider();
+        msbtwclickstextfield = new javax.swing.JTextField();
+        clickspersecondtextfield = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        onoffbutton.setText("On");
+        onoffbutton.setAutoscrolls(true);
+        onoffbutton.setName("onoffbutton"); // NOI18N
+        onoffbutton.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                onoffbuttonStateChanged(evt);
+            }
+        });
+        onoffbutton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                onoffbuttonActionPerformed(evt);
+            }
+        });
+
+        msbtwclicksslider.setMaximum(10000);
+        msbtwclicksslider.setMinimum(1);
+        msbtwclicksslider.setValue(1);
+        msbtwclicksslider.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                msbtwclickssliderStateChanged(evt);
+            }
+        });
+
+        msbtwclickstextfield.setText("1");
+        msbtwclickstextfield.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                msbtwclickstextfieldFocusLost(evt);
+            }
+        });
+
+        clickspersecondtextfield.setText("1000");
+        clickspersecondtextfield.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                clickspersecondtextfieldFocusLost(evt);
+            }
+        });
+        clickspersecondtextfield.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                clickspersecondtextfieldActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setText("ms between clicks");
+
+        jLabel2.setText("clicks per second");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(onoffbutton)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(200, 200, 200)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(msbtwclicksslider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(msbtwclickstextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(clickspersecondtextfield))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(118, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(msbtwclickstextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(clickspersecondtextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(msbtwclicksslider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(64, 64, 64)
+                .addComponent(onoffbutton)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void msbtwclickssliderStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_msbtwclickssliderStateChanged
+        // TODO add your handling code here:
+        int msbtwclicks=msbtwclicksslider.getValue();
+        msbtwclickstextfield.setText(Integer.toString(msbtwclicks));
+        int clickspersecond=(int)(double)((1/(double)msbtwclicks)*1000);
+        clickspersecondtextfield.setText(Integer.toString(clickspersecond));
+    }//GEN-LAST:event_msbtwclickssliderStateChanged
+
+    private void msbtwclickstextfieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_msbtwclickstextfieldFocusLost
+        // TODO add your handling code here:
+        int msbtwclicks=Integer.parseInt(msbtwclickstextfield.getText());
+        if(msbtwclicks<1){
+            msbtwclickstextfield.setText("1");
+            clickspersecondtextfield.setText("1000");
+            msbtwclicksslider.setValue(1);
+        }
+        else {
+            int clickspersecond=(int)(double)((1/(double)msbtwclicks)*1000);
+            clickspersecondtextfield.setText(Integer.toString(clickspersecond));
+            msbtwclicksslider.setValue(msbtwclicks<10000?msbtwclicks:10000);
+        }
+    }//GEN-LAST:event_msbtwclickstextfieldFocusLost
+
+    private void clickspersecondtextfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clickspersecondtextfieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_clickspersecondtextfieldActionPerformed
+
+    private void onoffbuttonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_onoffbuttonStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_onoffbuttonStateChanged
+
+    private void onoffbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onoffbuttonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_onoffbuttonActionPerformed
+
+    private void clickspersecondtextfieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_clickspersecondtextfieldFocusLost
+
+        int clickspersecond=Integer.parseInt(clickspersecondtextfield.getText());
+        if(clickspersecond>1000){
+            clickspersecondtextfield.setText("1000");
+            msbtwclicksslider.setValue(1);
+            msbtwclickstextfield.setText("1");
+        }
+        else {
+            if(clickspersecond>0){
+                int msbtwclicks=(int)(double)((1/(double)clickspersecond)*1000);
+                msbtwclicksslider.setValue(msbtwclicks);
+                msbtwclickstextfield.setText(Integer.toString(msbtwclicks));
+            }
+            else {
+                clickspersecondtextfield.setText("0");
+            }
+        }
+    }//GEN-LAST:event_clickspersecondtextfieldFocusLost
 
     /**
      * @param args the command line arguments
@@ -79,5 +220,11 @@ public class AutoClickerUi extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField clickspersecondtextfield;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JSlider msbtwclicksslider;
+    private javax.swing.JTextField msbtwclickstextfield;
+    private javax.swing.JToggleButton onoffbutton;
     // End of variables declaration//GEN-END:variables
 }
