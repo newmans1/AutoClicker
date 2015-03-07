@@ -4,18 +4,27 @@
  * and open the template in the editor.
  */
 package autoclicker;
-
+import java.awt.KeyEventDispatcher;
+import java.awt.event.KeyEvent;
+import java.awt.KeyboardFocusManager;
 /**
  *
  * @author vileelf
  */
-public class AutoClickerUi extends javax.swing.JFrame {
+public class AutoClickerUi extends javax.swing.JFrame implements KeyEventDispatcher{
 
     /**
      * Creates new form AutoClickerUi
      */
+    private AutoClicker clicker;
+    char hotkey;
+    boolean started;
     public AutoClickerUi() {
         initComponents();
+        clicker = new AutoClicker();
+        hotkey=KeyEvent.VK_0;
+        started=false;
+        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(this);
     }
 
     /**
@@ -135,8 +144,38 @@ public class AutoClickerUi extends javax.swing.JFrame {
         msbtwclickstextfield.setText(Integer.toString(msbtwclicks));
         int clickspersecond=(int)(double)((1/(double)msbtwclicks)*1000);
         clickspersecondtextfield.setText(Integer.toString(clickspersecond));
+        clicker.setMs(msbtwclicks);
     }//GEN-LAST:event_msbtwclickssliderStateChanged
+    public boolean dispatchKeyEvent(KeyEvent k) {
+        if (k.getID() == KeyEvent.KEY_PRESSED) {
+            if(k.getKeyChar()==hotkey){
+                if(!started){
+                    System.out.println(k.getKeyChar());
+                    started=true;
+                    int ms=Integer.parseInt(msbtwclickstextfield.getText());
+                    clicker = new AutoClicker(ms);
+                    clicker.startclick();
+                    clicker.start();
+                }
+            }
+        } else if (k.getID() == KeyEvent.KEY_RELEASED) {
+            if(k.getKeyChar()==hotkey){
+                if(started){
+                    System.out.println(k.getKeyChar());
+                    started=false;
+                    clicker.stopclick();
+                    try{
+                        //clicker.join();
+                        clicker.stop();
+                    }
+                    catch (Exception e){
 
+                    }
+                }
+            }
+        }
+        return false;
+    }
     private void msbtwclickstextfieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_msbtwclickstextfieldFocusLost
         // TODO add your handling code here:
         int msbtwclicks=Integer.parseInt(msbtwclickstextfield.getText());
@@ -144,11 +183,13 @@ public class AutoClickerUi extends javax.swing.JFrame {
             msbtwclickstextfield.setText("1");
             clickspersecondtextfield.setText("1000");
             msbtwclicksslider.setValue(1);
+            clicker.setMs(1);
         }
         else {
             int clickspersecond=(int)(double)((1/(double)msbtwclicks)*1000);
             clickspersecondtextfield.setText(Integer.toString(clickspersecond));
             msbtwclicksslider.setValue(msbtwclicks<10000?msbtwclicks:10000);
+            clicker.setMs(msbtwclicks);
         }
     }//GEN-LAST:event_msbtwclickstextfieldFocusLost
 
@@ -158,6 +199,23 @@ public class AutoClickerUi extends javax.swing.JFrame {
 
     private void onoffbuttonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_onoffbuttonStateChanged
         // TODO add your handling code here:
+        if(onoffbutton.isSelected()){
+            int ms=Integer.parseInt(msbtwclickstextfield.getText());
+            onoffbutton.setText("Off");
+            clicker = new AutoClicker(ms);
+            clicker.startclick();
+            clicker.start();
+        }
+        else {
+            onoffbutton.setText("On");
+            clicker.stopclick();
+            try{
+                clicker.join();
+            }
+            catch (Exception e){
+                
+            }
+        }
     }//GEN-LAST:event_onoffbuttonStateChanged
 
     private void onoffbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onoffbuttonActionPerformed
@@ -171,12 +229,14 @@ public class AutoClickerUi extends javax.swing.JFrame {
             clickspersecondtextfield.setText("1000");
             msbtwclicksslider.setValue(1);
             msbtwclickstextfield.setText("1");
+            clicker.setMs(1);
         }
         else {
             if(clickspersecond>0){
                 int msbtwclicks=(int)(double)((1/(double)clickspersecond)*1000);
                 msbtwclicksslider.setValue(msbtwclicks);
                 msbtwclickstextfield.setText(Integer.toString(msbtwclicks));
+                clicker.setMs(msbtwclicks);
             }
             else {
                 clickspersecondtextfield.setText("0");
