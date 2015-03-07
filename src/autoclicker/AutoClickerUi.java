@@ -4,27 +4,46 @@
  * and open the template in the editor.
  */
 package autoclicker;
-import java.awt.KeyEventDispatcher;
-import java.awt.event.KeyEvent;
-import java.awt.KeyboardFocusManager;
+import java.util.logging.Level;
+import org.jnativehook.keyboard.NativeKeyEvent;
+import org.jnativehook.keyboard.NativeKeyListener;
+import org.jnativehook.mouse.NativeMouseListener;
+import org.jnativehook.mouse.NativeMouseEvent;
+import org.jnativehook.GlobalScreen;
+import java.util.logging.Logger;
+import org.jnativehook.SwingDispatchService;
 /**
  *
  * @author vileelf
  */
-public class AutoClickerUi extends javax.swing.JFrame implements KeyEventDispatcher{
+public class AutoClickerUi extends javax.swing.JFrame implements NativeKeyListener, NativeMouseListener{
 
     /**
      * Creates new form AutoClickerUi
      */
     private AutoClicker clicker;
-    char hotkey;
+    int hotkey;
+    int mousemask;
     boolean started;
+    boolean mouse;
     public AutoClickerUi() {
         initComponents();
         clicker = new AutoClicker();
-        hotkey=KeyEvent.VK_0;
+        mousemask=NativeMouseEvent.BUTTON3_MASK;
+        hotkey=NativeMouseEvent.BUTTON3;
+        mouse=true;
         started=false;
-        KeyboardFocusManager.getCurrentKeyboardFocusManager().addKeyEventDispatcher(this);
+        GlobalScreen.setEventDispatcher(new SwingDispatchService());
+        try{
+            GlobalScreen.registerNativeHook();
+        }
+        catch(Exception e){
+        }
+        GlobalScreen.addNativeKeyListener(this);
+        GlobalScreen.addNativeMouseListener(this);
+        msbtwclicksslider.requestFocus();
+        Logger logger = Logger.getLogger(GlobalScreen.class.getPackage().getName());
+        logger.setLevel(Level.OFF);
     }
 
     /**
@@ -36,7 +55,6 @@ public class AutoClickerUi extends javax.swing.JFrame implements KeyEventDispatc
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        onoffbutton = new javax.swing.JToggleButton();
         msbtwclicksslider = new javax.swing.JSlider();
         msbtwclickstextfield = new javax.swing.JTextField();
         clickspersecondtextfield = new javax.swing.JTextField();
@@ -44,20 +62,6 @@ public class AutoClickerUi extends javax.swing.JFrame implements KeyEventDispatc
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        onoffbutton.setText("On");
-        onoffbutton.setAutoscrolls(true);
-        onoffbutton.setName("onoffbutton"); // NOI18N
-        onoffbutton.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                onoffbuttonStateChanged(evt);
-            }
-        });
-        onoffbutton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                onoffbuttonActionPerformed(evt);
-            }
-        });
 
         msbtwclicksslider.setMaximum(10000);
         msbtwclicksslider.setMinimum(1);
@@ -95,10 +99,6 @@ public class AutoClickerUi extends javax.swing.JFrame implements KeyEventDispatc
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(onoffbutton)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(200, 200, 200)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -130,9 +130,7 @@ public class AutoClickerUi extends javax.swing.JFrame implements KeyEventDispatc
                     .addComponent(clickspersecondtextfield, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(msbtwclicksslider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(64, 64, 64)
-                .addComponent(onoffbutton)
-                .addContainerGap())
+                .addGap(98, 98, 98))
         );
 
         pack();
@@ -146,11 +144,20 @@ public class AutoClickerUi extends javax.swing.JFrame implements KeyEventDispatc
         clickspersecondtextfield.setText(Integer.toString(clickspersecond));
         clicker.setMs(msbtwclicks);
     }//GEN-LAST:event_msbtwclickssliderStateChanged
-    public boolean dispatchKeyEvent(KeyEvent k) {
-        if (k.getID() == KeyEvent.KEY_PRESSED) {
-            if(k.getKeyChar()==hotkey){
+    @Override
+    public void nativeKeyTyped(NativeKeyEvent k){
+        //dont care
+    }
+    @Override
+    public void nativeMouseClicked(NativeMouseEvent k){
+        //dont care
+    }
+    @Override
+    public void nativeMousePressed(NativeMouseEvent k){
+        if(mouse){
+            if(k.getButton()==hotkey||(k.getModifiers()&mousemask)==mousemask){
                 if(!started){
-                    System.out.println(k.getKeyChar());
+                    System.out.println(k.getModifiers()&mousemask);
                     started=true;
                     int ms=Integer.parseInt(msbtwclickstextfield.getText());
                     clicker = new AutoClicker(ms);
@@ -158,14 +165,18 @@ public class AutoClickerUi extends javax.swing.JFrame implements KeyEventDispatc
                     clicker.start();
                 }
             }
-        } else if (k.getID() == KeyEvent.KEY_RELEASED) {
-            if(k.getKeyChar()==hotkey){
+        }
+    }
+    @Override
+    public void nativeMouseReleased(NativeMouseEvent k){
+        
+        if(mouse){
+            if(k.getButton()==hotkey){
                 if(started){
-                    System.out.println(k.getKeyChar());
+                    System.out.println(k.paramString());
                     started=false;
                     clicker.stopclick();
                     try{
-                        //clicker.join();
                         clicker.stop();
                     }
                     catch (Exception e){
@@ -174,7 +185,35 @@ public class AutoClickerUi extends javax.swing.JFrame implements KeyEventDispatc
                 }
             }
         }
-        return false;
+    }
+    @Override
+    public void nativeKeyPressed(NativeKeyEvent k){
+        if(k.getKeyCode()==hotkey){
+            if(!started){
+                System.out.println(k.getKeyChar());
+                started=true;
+                int ms=Integer.parseInt(msbtwclickstextfield.getText());
+                clicker = new AutoClicker(ms);
+                clicker.startclick();
+                clicker.start();
+            }
+        }
+    }
+    @Override
+    public void nativeKeyReleased(NativeKeyEvent k){
+        if(k.getKeyCode()==hotkey){
+            if(started){
+                System.out.println(k.getKeyChar());
+                started=false;
+                clicker.stopclick();
+                try{
+                    clicker.stop();
+                }
+                catch (Exception e){
+
+                }
+            }
+        }
     }
     private void msbtwclickstextfieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_msbtwclickstextfieldFocusLost
         // TODO add your handling code here:
@@ -196,31 +235,6 @@ public class AutoClickerUi extends javax.swing.JFrame implements KeyEventDispatc
     private void clickspersecondtextfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clickspersecondtextfieldActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_clickspersecondtextfieldActionPerformed
-
-    private void onoffbuttonStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_onoffbuttonStateChanged
-        // TODO add your handling code here:
-        if(onoffbutton.isSelected()){
-            int ms=Integer.parseInt(msbtwclickstextfield.getText());
-            onoffbutton.setText("Off");
-            clicker = new AutoClicker(ms);
-            clicker.startclick();
-            clicker.start();
-        }
-        else {
-            onoffbutton.setText("On");
-            clicker.stopclick();
-            try{
-                clicker.join();
-            }
-            catch (Exception e){
-                
-            }
-        }
-    }//GEN-LAST:event_onoffbuttonStateChanged
-
-    private void onoffbuttonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_onoffbuttonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_onoffbuttonActionPerformed
 
     private void clickspersecondtextfieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_clickspersecondtextfieldFocusLost
 
@@ -285,6 +299,5 @@ public class AutoClickerUi extends javax.swing.JFrame implements KeyEventDispatc
     private javax.swing.JLabel jLabel2;
     private javax.swing.JSlider msbtwclicksslider;
     private javax.swing.JTextField msbtwclickstextfield;
-    private javax.swing.JToggleButton onoffbutton;
     // End of variables declaration//GEN-END:variables
 }
