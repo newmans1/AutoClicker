@@ -22,10 +22,19 @@ public class AutoClickerUi extends javax.swing.JFrame implements NativeKeyListen
      * Creates new form AutoClickerUi
      */
     private AutoClicker clicker;
-    int hotkey;
-    int mousemask;
-    boolean started;
-    boolean mouse;
+    private Options options;
+    public int hotkey;
+    public int toggleoffhotkey;
+    public int mousemask;
+    private boolean started;
+    public boolean mouse;
+    public boolean on;
+    public enum clickmethod{
+        toggle,
+        hold,
+    };
+    public clickmethod cm;
+    
     public AutoClickerUi() {
         initComponents();
         clicker = new AutoClicker();
@@ -33,6 +42,9 @@ public class AutoClickerUi extends javax.swing.JFrame implements NativeKeyListen
         hotkey=NativeMouseEvent.BUTTON3;
         mouse=true;
         started=false;
+        on=true;
+        cm=clickmethod.hold;
+        options = new Options(this);
         GlobalScreen.setEventDispatcher(new SwingDispatchService());
         try{
             GlobalScreen.registerNativeHook();
@@ -60,6 +72,7 @@ public class AutoClickerUi extends javax.swing.JFrame implements NativeKeyListen
         clickspersecondtextfield = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        bttOptions = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -95,6 +108,13 @@ public class AutoClickerUi extends javax.swing.JFrame implements NativeKeyListen
 
         jLabel2.setText("clicks per second");
 
+        bttOptions.setText("Options");
+        bttOptions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bttOptionsActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -116,11 +136,17 @@ public class AutoClickerUi extends javax.swing.JFrame implements NativeKeyListen
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addContainerGap())))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(bttOptions)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(118, Short.MAX_VALUE)
+                .addContainerGap()
+                .addComponent(bttOptions)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2))
@@ -154,7 +180,7 @@ public class AutoClickerUi extends javax.swing.JFrame implements NativeKeyListen
     }
     @Override
     public void nativeMousePressed(NativeMouseEvent k){
-        if(mouse){
+        if(on&&mouse){
             if(k.getButton()==hotkey||(k.getModifiers()&mousemask)==mousemask){
                 if(!started){
                     System.out.println(k.getModifiers()&mousemask);
@@ -188,7 +214,7 @@ public class AutoClickerUi extends javax.swing.JFrame implements NativeKeyListen
     }
     @Override
     public void nativeKeyPressed(NativeKeyEvent k){
-        if(k.getKeyCode()==hotkey){
+        if(on&&k.getKeyCode()==hotkey){
             if(!started){
                 System.out.println(k.getKeyChar());
                 started=true;
@@ -258,6 +284,11 @@ public class AutoClickerUi extends javax.swing.JFrame implements NativeKeyListen
         }
     }//GEN-LAST:event_clickspersecondtextfieldFocusLost
 
+    private void bttOptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttOptionsActionPerformed
+        // goto options page
+        
+    }//GEN-LAST:event_bttOptionsActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -294,6 +325,7 @@ public class AutoClickerUi extends javax.swing.JFrame implements NativeKeyListen
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bttOptions;
     private javax.swing.JTextField clickspersecondtextfield;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
