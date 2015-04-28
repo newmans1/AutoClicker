@@ -98,11 +98,6 @@ public class AutoClickerUi extends javax.swing.JFrame implements NativeKeyListen
                 clickspersecondtextfieldFocusLost(evt);
             }
         });
-        clickspersecondtextfield.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                clickspersecondtextfieldActionPerformed(evt);
-            }
-        });
 
         jLabel1.setText("ms between clicks");
 
@@ -257,10 +252,6 @@ public class AutoClickerUi extends javax.swing.JFrame implements NativeKeyListen
             clicker.setMs(msbtwclicks);
         }
     }//GEN-LAST:event_msbtwclickstextfieldFocusLost
-
-    private void clickspersecondtextfieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_clickspersecondtextfieldActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_clickspersecondtextfieldActionPerformed
 
     private void clickspersecondtextfieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_clickspersecondtextfieldFocusLost
 

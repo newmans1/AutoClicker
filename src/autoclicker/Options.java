@@ -15,9 +15,13 @@ public class Options extends javax.swing.JFrame {
      * Creates new form Options
      */
     AutoClickerUi au;
+    boolean getKey;
+    boolean getToggleKey;
     public Options(AutoClickerUi au) {
         initComponents();
         this.au=au;
+        getKey=false;
+        getToggleKey=false;
     }
 
     /**
@@ -34,6 +38,8 @@ public class Options extends javax.swing.JFrame {
         radHold = new javax.swing.JRadioButton();
         bttSave = new javax.swing.JButton();
         bttCancel = new javax.swing.JButton();
+        txtHotkey = new javax.swing.JTextField();
+        txtToggleKey = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -46,6 +52,7 @@ public class Options extends javax.swing.JFrame {
         });
 
         btgClickMethod.add(radHold);
+        radHold.setSelected(true);
         radHold.setText("Hold");
         radHold.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -57,22 +64,59 @@ public class Options extends javax.swing.JFrame {
 
         bttCancel.setText("Cancel");
 
+        txtHotkey.setText("Hotkey");
+        txtHotkey.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtHotkeyFocusGained(evt);
+            }
+        });
+        txtHotkey.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                txtHotkeyMouseReleased(evt);
+            }
+        });
+        txtHotkey.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtHotkeyKeyReleased(evt);
+            }
+        });
+
+        txtToggleKey.setText("Toggle Off Hotkey");
+        txtToggleKey.setEnabled(false);
+        txtToggleKey.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtToggleKeyFocusGained(evt);
+            }
+        });
+        txtToggleKey.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                txtToggleKeyMouseReleased(evt);
+            }
+        });
+        txtToggleKey.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtToggleKeyKeyReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(radToggle)
-                    .addComponent(radHold))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(218, Short.MAX_VALUE)
                 .addComponent(bttSave)
                 .addGap(18, 18, 18)
                 .addComponent(bttCancel)
                 .addGap(42, 42, 42))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(radToggle)
+                    .addComponent(radHold)
+                    .addComponent(txtToggleKey)
+                    .addComponent(txtHotkey))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -81,7 +125,11 @@ public class Options extends javax.swing.JFrame {
                 .addComponent(radToggle)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(radHold)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 210, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 106, Short.MAX_VALUE)
+                .addComponent(txtHotkey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(txtToggleKey, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(53, 53, 53)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bttSave)
                     .addComponent(bttCancel))
@@ -92,12 +140,47 @@ public class Options extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void radHoldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radHoldActionPerformed
-        // TODO add your handling code here:
+        //Hold option Selected
+        
     }//GEN-LAST:event_radHoldActionPerformed
 
     private void radToggleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_radToggleActionPerformed
-        // TODO add your handling code here:
+        //Toggle option Selected
     }//GEN-LAST:event_radToggleActionPerformed
+
+    private void txtHotkeyKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtHotkeyKeyReleased
+        //hotkey selected
+        if(getKey){
+            
+            getKey=false;
+        }
+    }//GEN-LAST:event_txtHotkeyKeyReleased
+
+    private void txtHotkeyMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtHotkeyMouseReleased
+        // mouse hotkey selected
+        if(getKey){
+            
+            getKey=false;
+        }
+    }//GEN-LAST:event_txtHotkeyMouseReleased
+
+    private void txtHotkeyFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtHotkeyFocusGained
+        // hotkey is being selected
+        getKey=true;
+        txtHotkey.setText("");
+    }//GEN-LAST:event_txtHotkeyFocusGained
+
+    private void txtToggleKeyFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtToggleKeyFocusGained
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtToggleKeyFocusGained
+
+    private void txtToggleKeyMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtToggleKeyMouseReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtToggleKeyMouseReleased
+
+    private void txtToggleKeyKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtToggleKeyKeyReleased
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtToggleKeyKeyReleased
 
     /**
      * @param args the command line arguments
@@ -109,5 +192,7 @@ public class Options extends javax.swing.JFrame {
     private javax.swing.JButton bttSave;
     private javax.swing.JRadioButton radHold;
     private javax.swing.JRadioButton radToggle;
+    private javax.swing.JTextField txtHotkey;
+    private javax.swing.JTextField txtToggleKey;
     // End of variables declaration//GEN-END:variables
 }
