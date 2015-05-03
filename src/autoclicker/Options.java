@@ -41,7 +41,11 @@ public class Options extends javax.swing.JFrame {
         txtHotkey = new javax.swing.JTextField();
         txtToggleKey = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowClosing(java.awt.event.WindowEvent evt) {
+                formWindowClosing(evt);
+            }
+        });
 
         btgClickMethod.add(radToggle);
         radToggle.setText("Toggle");
@@ -65,19 +69,14 @@ public class Options extends javax.swing.JFrame {
         bttCancel.setText("Cancel");
 
         txtHotkey.setText("Hotkey");
-        txtHotkey.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtHotkeyFocusGained(evt);
-            }
-        });
         txtHotkey.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 txtHotkeyMouseReleased(evt);
             }
         });
-        txtHotkey.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtHotkeyKeyReleased(evt);
+        txtHotkey.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtHotkeyActionPerformed(evt);
             }
         });
 
@@ -148,28 +147,32 @@ public class Options extends javax.swing.JFrame {
         //Toggle option Selected
     }//GEN-LAST:event_radToggleActionPerformed
 
-    private void txtHotkeyKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtHotkeyKeyReleased
-        //hotkey selected
-        if(getKey){
-            
-            getKey=false;
-        }
-    }//GEN-LAST:event_txtHotkeyKeyReleased
-
     private void txtHotkeyMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtHotkeyMouseReleased
-        // mouse hotkey selected
-        if(getKey){
-            
-            getKey=false;
-        }
+        
     }//GEN-LAST:event_txtHotkeyMouseReleased
-
-    private void txtHotkeyFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtHotkeyFocusGained
-        // hotkey is being selected
-        getKey=true;
-        txtHotkey.setText("");
-    }//GEN-LAST:event_txtHotkeyFocusGained
-
+// mouse hotkey selected
+        /*if(getKey){
+            au.hotkey=evt.getButton();
+            switch(au.hotkey){
+                case MouseEvent.BUTTON1:
+                    au.mousemask=MouseEvent.BUTTON1_MASK;
+                    txtHotkey.setText("Mouse 1");
+                    break;
+                case MouseEvent.BUTTON2:
+                    au.mousemask=MouseEvent.BUTTON2_MASK;
+                    txtHotkey.setText("Mouse 2");
+                    break;
+                case MouseEvent.BUTTON3:
+                    au.mousemask=MouseEvent.BUTTON3_MASK;
+                    txtHotkey.setText("Mouse 3");
+                    break;
+                default:
+                    au.mousemask=1;
+                    break;
+            }
+            au.mouse=true;
+            getKey=false;
+        }*/
     private void txtToggleKeyFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtToggleKeyFocusGained
         // TODO add your handling code here:
     }//GEN-LAST:event_txtToggleKeyFocusGained
@@ -181,6 +184,17 @@ public class Options extends javax.swing.JFrame {
     private void txtToggleKeyKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtToggleKeyKeyReleased
         // TODO add your handling code here:
     }//GEN-LAST:event_txtToggleKeyKeyReleased
+
+    private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
+        // TODO add your handling code here:
+        au.on=true;
+        au.setVisible(true);
+        System.out.println(au.hotkey);
+    }//GEN-LAST:event_formWindowClosing
+
+    private void txtHotkeyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHotkeyActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtHotkeyActionPerformed
 
     /**
      * @param args the command line arguments

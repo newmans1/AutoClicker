@@ -40,6 +40,7 @@ public class AutoClickerUi extends javax.swing.JFrame implements NativeKeyListen
         clicker = new AutoClicker();
         mousemask=NativeMouseEvent.BUTTON3_MASK;
         hotkey=NativeMouseEvent.BUTTON3;
+        System.out.println(hotkey);
         mouse=true;
         started=false;
         on=true;
@@ -172,13 +173,29 @@ public class AutoClickerUi extends javax.swing.JFrame implements NativeKeyListen
     @Override
     public void nativeMouseClicked(NativeMouseEvent k){
         //dont care
+        if(mouse){
+            if(k.getButton()==hotkey){
+                if(started){
+                    System.out.println(k.paramString());
+                    started=false;
+                    clicker.stopclick();
+                    try{
+                        clicker.stop();
+                    }
+                    catch (Exception e){
+
+                    }
+                }
+            }
+        }
     }
     @Override
     public void nativeMousePressed(NativeMouseEvent k){
+        System.out.println(k.getButton());
+        System.out.println(k.paramString());
         if(on&&mouse){
-            if(k.getButton()==hotkey||(k.getModifiers()&mousemask)==mousemask){
+            if((k.getButton()==hotkey&&(k.getModifiers()&mousemask)==mousemask)||(k.getModifiers()&mousemask)==mousemask){
                 if(!started){
-                    System.out.println(k.getModifiers()&mousemask);
                     started=true;
                     int ms=Integer.parseInt(msbtwclickstextfield.getText());
                     clicker = new AutoClicker(ms);
@@ -190,9 +207,9 @@ public class AutoClickerUi extends javax.swing.JFrame implements NativeKeyListen
     }
     @Override
     public void nativeMouseReleased(NativeMouseEvent k){
-        
+        System.out.println(k.getButton());
         if(mouse){
-            if(k.getButton()==hotkey){
+            if(k.getButton()==hotkey||(k.getModifiers()&mousemask)!=mousemask){
                 if(started){
                     System.out.println(k.paramString());
                     started=false;
@@ -277,7 +294,9 @@ public class AutoClickerUi extends javax.swing.JFrame implements NativeKeyListen
 
     private void bttOptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttOptionsActionPerformed
         // goto options page
-        
+       // on=false;
+        //this.setVisible(false);
+        //options.setVisible(true);
     }//GEN-LAST:event_bttOptionsActionPerformed
 
     /**
