@@ -174,7 +174,7 @@ public class AutoClickerUi extends javax.swing.JFrame implements NativeKeyListen
     public void nativeMouseClicked(NativeMouseEvent k){
         //dont care
         if(mouse){
-            if(k.getButton()==hotkey){
+            if((k.getModifiers()&mousemask)!=mousemask){
                 if(started){
                     System.out.println(k.paramString());
                     started=false;
@@ -191,10 +191,8 @@ public class AutoClickerUi extends javax.swing.JFrame implements NativeKeyListen
     }
     @Override
     public void nativeMousePressed(NativeMouseEvent k){
-        System.out.println(k.getButton());
-        System.out.println(k.paramString());
         if(on&&mouse){
-            if((k.getButton()==hotkey&&(k.getModifiers()&mousemask)==mousemask)||(k.getModifiers()&mousemask)==mousemask){
+            if((k.getModifiers()&mousemask)==mousemask){
                 if(!started){
                     started=true;
                     int ms=Integer.parseInt(msbtwclickstextfield.getText());
@@ -206,12 +204,11 @@ public class AutoClickerUi extends javax.swing.JFrame implements NativeKeyListen
         }
     }
     @Override
-    public void nativeMouseReleased(NativeMouseEvent k){
-        System.out.println(k.getButton());
+    public synchronized void nativeMouseReleased(NativeMouseEvent k){
         if(mouse){
-            if(k.getButton()==hotkey||(k.getModifiers()&mousemask)!=mousemask){
+            System.out.println(k.getModifiers());
+            if((k.getModifiers()&mousemask)!=mousemask){
                 if(started){
-                    System.out.println(k.paramString());
                     started=false;
                     clicker.stopclick();
                     try{
@@ -228,7 +225,6 @@ public class AutoClickerUi extends javax.swing.JFrame implements NativeKeyListen
     public void nativeKeyPressed(NativeKeyEvent k){
         if(on&&k.getKeyCode()==hotkey){
             if(!started){
-                System.out.println(k.getKeyChar());
                 started=true;
                 int ms=Integer.parseInt(msbtwclickstextfield.getText());
                 clicker = new AutoClicker(ms);
@@ -241,7 +237,6 @@ public class AutoClickerUi extends javax.swing.JFrame implements NativeKeyListen
     public void nativeKeyReleased(NativeKeyEvent k){
         if(k.getKeyCode()==hotkey){
             if(started){
-                System.out.println(k.getKeyChar());
                 started=false;
                 clicker.stopclick();
                 try{
@@ -294,9 +289,9 @@ public class AutoClickerUi extends javax.swing.JFrame implements NativeKeyListen
 
     private void bttOptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bttOptionsActionPerformed
         // goto options page
-       // on=false;
-        //this.setVisible(false);
-        //options.setVisible(true);
+        on=false;
+        this.setVisible(false);
+        options.setVisible(true);
     }//GEN-LAST:event_bttOptionsActionPerformed
 
     /**

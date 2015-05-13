@@ -82,19 +82,9 @@ public class Options extends javax.swing.JFrame {
 
         txtToggleKey.setText("Toggle Off Hotkey");
         txtToggleKey.setEnabled(false);
-        txtToggleKey.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                txtToggleKeyFocusGained(evt);
-            }
-        });
         txtToggleKey.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 txtToggleKeyMouseReleased(evt);
-            }
-        });
-        txtToggleKey.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                txtToggleKeyKeyReleased(evt);
             }
         });
 
@@ -150,40 +140,10 @@ public class Options extends javax.swing.JFrame {
     private void txtHotkeyMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtHotkeyMouseReleased
         
     }//GEN-LAST:event_txtHotkeyMouseReleased
-// mouse hotkey selected
-        /*if(getKey){
-            au.hotkey=evt.getButton();
-            switch(au.hotkey){
-                case MouseEvent.BUTTON1:
-                    au.mousemask=MouseEvent.BUTTON1_MASK;
-                    txtHotkey.setText("Mouse 1");
-                    break;
-                case MouseEvent.BUTTON2:
-                    au.mousemask=MouseEvent.BUTTON2_MASK;
-                    txtHotkey.setText("Mouse 2");
-                    break;
-                case MouseEvent.BUTTON3:
-                    au.mousemask=MouseEvent.BUTTON3_MASK;
-                    txtHotkey.setText("Mouse 3");
-                    break;
-                default:
-                    au.mousemask=1;
-                    break;
-            }
-            au.mouse=true;
-            getKey=false;
-        }*/
-    private void txtToggleKeyFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtToggleKeyFocusGained
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtToggleKeyFocusGained
 
     private void txtToggleKeyMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_txtToggleKeyMouseReleased
         // TODO add your handling code here:
     }//GEN-LAST:event_txtToggleKeyMouseReleased
-
-    private void txtToggleKeyKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtToggleKeyKeyReleased
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtToggleKeyKeyReleased
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
         // TODO add your handling code here:
@@ -194,6 +154,7 @@ public class Options extends javax.swing.JFrame {
 
     private void txtHotkeyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHotkeyActionPerformed
         // TODO add your handling code here:
+        System.out.println("action!");
     }//GEN-LAST:event_txtHotkeyActionPerformed
 
     /**
