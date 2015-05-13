@@ -44,4 +44,9 @@ Temporary Items
 /build/
 
 #custom stuff
-nbproject/private/*
+Debug/*
+AutoClicker/Debug/*
+ipch/*
+AutoClicker.v12.suo
+AutoClicker.sdf
+AutoClicker.opensdf
